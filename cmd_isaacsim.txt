@@ -1,0 +1,66 @@
+note:
+the __init__.py of the task usually stores all the configurations for training which will then be passed to the actual play.py later 
+(inside script?RL/***/train.py)
+
+In isaacsim, the env_cfg.py defines the environment
+there is no main() in this .py
+this module is run by another script. See scripts/tutorials/03_envs/run_cartpole_rl_env.py as example
+
+conda activate env_Isaaclab
+
+build project:
+.\isaaclab.bat
+python -m pip install -e source\
+
+
+run training:
+.\isaaclab.bat -p scripts\reinforcement_learning\sb3\train.py --task Isaac-Humanoid-v0 --num_envs 1500
+
+resume training from last checkpoint:
+.\isaaclab.bat -p scripts\reinforcement_learning\sb3\train.py --task Isaac-Humanoid-v0 --num_envs 2000 --checkpoint logs\sb3\Isaac-Humanoid-v0\2026-01-16_16-53-42\model_18000000_steps.zip
+
+
+
+
+play trained policies:
+.\isaaclab.bat -p scripts\reinforcement_learning\sb3\play.py --task Isaac-Humanoid-v0 --num_envs 32 --use_last_checkpoint
+
+unitree train:
+.\isaaclab.bat -p scripts\reinforcement_learning\rl_games\train.py --task Isaac-H1-Direct-v0 --num_envs 4096 --checkpoint logs\rl_games\humanoid_direct\2026-01-20_09-50-01\nn\last_humanoid_direct_ep_200_rew_2110.9397.pth
+
+unitree play:
+.\isaaclab.bat -p scripts\reinforcement_learning\rl_games\play.py --task Isaac-H1-Direct-v0 --num_envs 10 --use_last_checkpoint
+.\isaaclab.bat -p scripts\reinforcement_learning\rl_games\play.py --task Isaac-H1-Direct-v0 --num_envs 4096
+.\isaaclab.bat -p scripts\reinforcement_learning\rl_games\play.py --task Isaac-H1-Direct-v0 --num_envs 4096 --checkpoint logs\rl_games\humanoid_direct\2026-01-19_14-57-49\nn\last_humanoid_direct_ep_150_rew_2293.5317.pth 
+
+
+Franka reach train:
+.\isaaclab.bat -p scripts\reinforcement_learning\skrl\train.py --task Isaac-Reach-Franka-v0 --num_envs 100
+
+gr1t2 pick & place train:
+.\isaaclab.bat -p scripts\reinforcement_learning\skrl\train.py --task Isaac-PickPlace-GR1T2-Abs-v0 --num_envs 100
+
+
+Policy inference tutorial:
+.\isaaclab.bat -p scripts\reinforcement_learning\rsl_rl\train.py --task Isaac-Velocity-Rough-H1-v0 --headless --checkpoint logs\rsl_rl\h1_rough\2026-01-21_13-31-57\model_1650.pt
+
+use in USD environment
+.\isaaclab.bat -p scripts\tutorials\03_envs\policy_inference_in_usd.py --checkpoint logs\rsl_rl\h1_rough\2026-01-21_13-31-57\exported\policy.pt
+
+adding sensors tutorial:
+.\isaaclab.bat -p scripts\tutorials\04_sensors\add_sensors_on_robot.py --num_envs 2 --enable_cameras
+.\isaaclab.bat -p scripts\tutorials\04_sensors\run_usd_camera.py --enable_cameras
+.\isaaclab.bat -p scripts\tutorials\04_sensors\run_ray_caster_camera.py
+
+.\isaaclab.bat -p scripts\tutorials\05_controllers\run_osc.py --num_envs 128
+
+
+
++++++++++++++XARM TEST+++++++++++++
+rewards.py calculate the reward
+lite6_pos_env_cfg.py maps the parameters of the robot to the task defined in the lite6test_env_cfg.py
+
+Training task:
+python scripts\skrl\train.py --task Template-Lite6test-v0
+dummy agent:
+python scripts\zero_agent.py --task=Template-Lite6test-v0
